@@ -21,7 +21,7 @@ int	main(int ac, char **av)
 	pp = make_table(ac, av);
 	feast_time(&pp);
 	clean_up(pp.garbabe_location);
-	system("leaks philo");
+	// system("leaks philo");
 	return (0);
 }
 

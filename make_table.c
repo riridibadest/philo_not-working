@@ -31,9 +31,10 @@ t_table	read_input(int ac, char **av)
 	feast.sleep_time = ft_atoi(av[4]);
 	feast.min_times_to_eat = -1;
 	feast.someone_died = false;
-	feast.start_time = get_time_ms();
+	feast.start_time = 0;
 	feast.garbabe_location = NULL;
 	pthread_mutex_init(&feast.death, NULL);
+	pthread_mutex_init(&feast.p_lock, NULL);
 	if (ac == 6)
 		feast.min_times_to_eat = ft_atoi(av[5]);
 	return (feast);
@@ -101,5 +102,8 @@ t_table	make_table(int ac, char **av)
 	pimp = read_input(ac, av);
 	make_philops(&pimp);
 	init_philop(&pimp);
+	// Fix: Set start_time after all initialization is complete
+	pimp.start_time = get_time_ms();
+	// Update all philosophers' last_time_eat to match start_time
 	return (pimp);
 }

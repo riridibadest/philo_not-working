@@ -21,20 +21,20 @@ int	feast_time(t_table *pp)
 
 	i = 0;
 	pp->start_time = get_time_ms();
-	pthread_create(&td, NULL, dead_yet, pp);
 	while (i < pp->head)
 	{
 		pthread_create(&pp->philop[i].thread, NULL, life_of_philop,
 			&pp->philop[i]);
 		i++;
 	}
-	pthread_join(td, NULL);
 	i = 0;
+	pthread_create(&td, NULL, dead_yet, pp);
 	while (i < pp->head)
 	{
 		pthread_join(pp->philop[i].thread, NULL);
 		i++;
 	}
+	pthread_join(td, NULL);
 	return (1);
 }
 
@@ -73,21 +73,23 @@ void	*dead_yet(void *pp)
 	t_table	*eye;
 
 	eye = (t_table *)pp;
-	id = 0;
-	while (id < eye->head && eye->someone_died != true)
+	while (eye->someone_died != true)
 	{
-		if (eat_gap(eye, id) > eye->die_time)
+		id = 0;
+		while (id < eye->head && eye->someone_died != true)
 		{
-			pthread_mutex_lock(&eye->death);
-			eye->someone_died = true;
-			pthread_mutex_unlock(&eye->death);
-			return (o_print(&eye->philop[id], 5, id + 1), NULL);
+			if (eat_gap(eye, id) > eye->die_time)
+			{
+				pthread_mutex_lock(&eye->death);
+				eye->someone_died = true;
+				pthread_mutex_unlock(&eye->death);
+				return (o_print(&eye->philop[id], 5, id + 1), NULL);
+			}
+			id++;
 		}
 		if (we_r_full(eye) == 0)
-			return (o_print(&eye->philop[id], 6, id + 1), NULL);
-		id++;
-		if (id == eye->head)
-			id = 0;
+			return (o_print(&eye->philop[0], 6, 1), NULL);
+		usleep(10);
 	}
 	return (NULL);
 }

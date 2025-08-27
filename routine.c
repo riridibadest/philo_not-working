@@ -16,17 +16,16 @@ void	eat(t_philop *pp)
 {
 	size_t	id;
 	bool	state;
-	pthread_mutex_t	*first;
-	pthread_mutex_t	*second;
+	// pthread_mutex_t	*first;
+	// pthread_mutex_t	*second;
 
 	id = pp->id;
 	if (pp->table->head == 1)
 		solo_eating(pp);
 	// if ((pp->table->head % 2) == 0)
 	// {
-	// 	if ((id % 2) == 0)
-	// 		usleep(id * 10);
-	// }
+	if ((id % 2) == 1)
+		usleep(200);
 	// else
 	// {
 	// 	if ((id % 2) == 1)
@@ -37,27 +36,27 @@ void	eat(t_philop *pp)
 	pthread_mutex_unlock(&pp->table->death);
 	if (state)
 		return ;
-	if ((pp->id % 2) == 0) 
-	{ 
-		first = pp->l_fork; 
-		second = pp->r_fork; 
-	} 
-	else 
-	{ 
-		first = pp->r_fork; 
-		second = pp->l_fork; 
-	}
-	pthread_mutex_lock(first);
+	// if ((pp->id % 2) == 0) 
+	// { 
+	// 	first = pp->l_fork; 
+	// 	second = pp->r_fork; 
+	// } 
+	// else 
+	// { 
+	// 	first = pp->r_fork; 
+	// 	second = pp->l_fork; 
+	// }
+	pthread_mutex_lock(pp->l_fork);
 	o_print(pp, 1, id);
-	pthread_mutex_lock(second);
+	pthread_mutex_lock(pp->r_fork);
 	o_print(pp, 1, id);
 	o_print(pp, 2, id);
 	pp->last_time_eat = get_time_ms();
 	pp->eat_count++;
 	smart_rest(pp, pp->table->eat_time);
 	// Fix: Unlock in reverse order of locking
-	pthread_mutex_unlock(second);
-	pthread_mutex_unlock(first);
+	pthread_mutex_unlock(pp->r_fork);
+	pthread_mutex_unlock(pp->l_fork);
 }
 
 void	p_sleep(t_philop *pp)

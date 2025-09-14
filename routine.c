@@ -23,7 +23,6 @@ void	eat(t_philop *pp)
 	if (pp->table->head == 1)
 		solo_eating(pp);
 	// if ((pp->table->head % 2) == 0)
-	// {
 	if ((id % 2) == 1)
 		usleep(200);
 	// else
@@ -53,6 +52,8 @@ void	eat(t_philop *pp)
 	o_print(pp, 2, id);
 	pp->last_time_eat = get_time_ms();
 	pp->eat_count++;
+	if (pp->eat_count == pp->table->min_times_to_eat)
+		pp->full = 1;
 	smart_rest(pp, pp->table->eat_time);
 	// Fix: Unlock in reverse order of locking
 	pthread_mutex_unlock(pp->r_fork);

@@ -78,6 +78,8 @@ void	*dead_yet(void *pp)
 		id = 0;
 		while (id < eye->head && eye->someone_died != true)
 		{
+			if (we_r_full(eye) == 0)
+				return (o_print(&eye->philop[0], 6, 1), NULL);
 			if (eat_gap(eye, id) > eye->die_time)
 			{
 				pthread_mutex_lock(&eye->death);
@@ -87,8 +89,6 @@ void	*dead_yet(void *pp)
 			}
 			id++;
 		}
-		if (we_r_full(eye) == 0)
-			return (o_print(&eye->philop[0], 6, 1), NULL);
 		usleep(10);
 	}
 	return (NULL);

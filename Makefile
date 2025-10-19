@@ -1,6 +1,6 @@
 CC := cc
 
-CFLAGS := -Wall -Wextra -Werror -g
+CFLAGS := -Wall -Wextra -Werror -pthread -Ofast
 IFLAGS := -I.
 
 

@@ -6,14 +6,14 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 18:33:31 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/07/22 23:05:51 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/19 22:46:45 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//here i malloc memory for storing things for content of a struct, and
-//create a list that technically store the same struct and return pointer at
+// here i malloc memory for storing things for content of a struct, and
+// create a list that technically store the same struct and return pointer at
 // end of list
 
 void	*malloc_table_sth(t_table *pp, size_t size)
@@ -44,20 +44,29 @@ size_t	get_time_ms(void)
 	return ((time.tv_sec * 1000L) + (time.tv_usec / 1000));
 }
 
-int	eat_gap(t_table *pp, int id)
+size_t	eat_gap(t_table *pp, int id)
 {
 	size_t	now;
-	int	hunger_time;
+	size_t	hunger_time;
 
 	now = get_time_ms();
+	//pthread_mutex_lock(&pp->death);
 	hunger_time = now - pp->philop[id].last_time_eat;
+	//pthread_mutex_unlock(&pp->death);
 	return (hunger_time);
 }
-//1 = takefork; 2 = eating; 3 = sleeping; 4 = thinking; 5 = died
+
+// 1 = takefork; 2 = eating; 3 = sleeping; 4 = thinking; 5 = died
+// if (pp->table->someone_died && i != 5)
+// {
+// 	pthread_mutex_unlock(&pp->table->p_lock);
+// 	return ;
+// }
+// idk if above is needed to insert into o_print
 
 void	o_print(t_philop *pp, int i, int id)
 {
-	int	time;
+	size_t	time;
 
 	time = (get_time_ms() - pp->table->start_time);
 	pthread_mutex_lock(&pp->table->p_lock);
@@ -67,21 +76,26 @@ void	o_print(t_philop *pp, int i, int id)
 		return ;
 	}
 	if (i == 1)
-		printf("%d %d has taken a fork\n", time, (id));
+		printf("%zu %d has taken a fork\n", time, (id));
 	else if (i == 2)
-		printf("%d %d is eating\n", time, (id));
+		printf("%zu %d is eating\n", time, (id));
 	else if (i == 3)
-		printf("%d %d is sleeping\n", time, (id));
+		printf("%zu %d is sleeping\n", time, (id));
 	else if (i == 4)
-		printf("%d %d is thinking\n", time, (id));
+		printf("%zu %d is thinking\n", time, (id));
 	else if (i == 6)
-		printf("%d Everyone is full\n", time);
+		printf("%zu Everyone is full\n", time);
 	else if (i == 5)
 	{
 		pthread_mutex_lock(&pp->table->death);
-		if (!pp->table->someone_died)
-			pp->table->someone_died = true;
-		printf("%d %d died\n", time, (id));
+        if (pp->table->someone_died)
+        {
+            pthread_mutex_unlock(&pp->table->death);
+            pthread_mutex_unlock(&pp->table->p_lock);
+            return;
+        }
+		pp->table->someone_died = true;
+		printf("%zu %d died\n", time, (id));
 		pthread_mutex_unlock(&pp->table->death);
 	}
 	pthread_mutex_unlock(&pp->table->p_lock);
@@ -103,4 +117,3 @@ void	smart_rest(t_philop *pp, size_t i)
 		usleep(10);
 	}
 }
-

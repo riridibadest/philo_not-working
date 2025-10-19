@@ -6,16 +6,16 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 18:06:00 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/07/22 21:20:11 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/17 17:32:45 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//1.parse the numbers and time to initialize the system:
-//number of ppl, and the things they do. Allocate memories too
+// 1.parse the numbers and time to initialize the system:
+// number of ppl, and the things they do. Allocate memories too
 
-//the parse take the arguements: and return a pointer/NULL
+// the parse take the arguements: and return a pointer/NULL
 t_table	read_input(int ac, char **av)
 {
 	t_table	feast;
@@ -24,7 +24,7 @@ t_table	read_input(int ac, char **av)
 	if (feast.head == 0)
 	{
 		printf("Wrong number of Philosophers");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	feast.die_time = ft_atoi(av[2]);
 	feast.eat_time = ft_atoi(av[3]);
@@ -73,7 +73,7 @@ void	init_philop(t_table *pimp)
 	}
 }
 
-//here allocating the memory for philosophers, mark each philop's id
+// here allocating the memory for philosophers, mark each philop's id
 void	make_philops(t_table *pp)
 {
 	size_t	splop;
@@ -98,12 +98,17 @@ void	make_philops(t_table *pp)
 t_table	make_table(int ac, char **av)
 {
 	t_table	pimp;
+	int		i;
 
+	i = 0;
 	pimp = read_input(ac, av);
 	make_philops(&pimp);
 	init_philop(&pimp);
-	// Fix: Set start_time after all initialization is complete
 	pimp.start_time = get_time_ms();
-	// Update all philosophers' last_time_eat to match start_time
+	while (i < pimp.head)
+	{
+		pimp.philop[i].last_time_eat = pimp.start_time;
+		i++;
+	}
 	return (pimp);
 }

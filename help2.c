@@ -6,7 +6,7 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:25 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/07/19 20:13:10 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/17 17:28:04 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	clean_up(t_list *garbabe)
 	}
 }
 
-//1 = ok, 0 != ok;
+// 1 = ok, 0 != ok;
+// int_max checking undone!
 
 int	ok_input(int ac, char **av)
 {

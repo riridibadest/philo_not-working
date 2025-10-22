@@ -6,7 +6,7 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:25 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/10/17 17:28:04 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/22 16:28:32 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 void	clean_up(t_list *garbabe)
 {
 	t_list	*temp;
+	int		i;
 
+	i = 0;
+	if (garbabe == NULL)
+		return ;
 	while (garbabe != NULL)
 	{
 		temp = garbabe;

@@ -6,7 +6,7 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:25 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/10/17 17:32:09 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/22 16:19:17 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ int	main(int ac, char **av)
 
 	if (ok_input(ac, av) == 0)
 		return (printf("Wrong Input or Wrong Number of Arguments"), 1);
+	pp.garbabe_location = NULL;
 	pp = make_table(ac, av);
+	if (pp.head == -1)
+		return (printf("Memory Allocation Failed\n"),
+			clean_up(pp.garbabe_location), 1);
 	feast_time(&pp);
 	clean_up(pp.garbabe_location);
 	return (0);

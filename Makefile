@@ -6,7 +6,7 @@ IFLAGS := -I.
 
 NAME := philo
 
-SRC_FILES := feast.c help.c help2.c main.c make_table.c routine.c
+SRC_FILES := feast.c help.c help2.c main.c make_table.c routine.c lma.c
 OBJ_FILES := $(SRC_FILES:.c=.o)
 
 # Rules

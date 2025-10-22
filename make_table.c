@@ -6,7 +6,7 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 18:06:00 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/10/17 17:32:45 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/22 16:53:53 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ t_table	read_input(int ac, char **av)
 	pthread_mutex_init(&feast.p_lock, NULL);
 	if (ac == 6)
 		feast.min_times_to_eat = ft_atoi(av[5]);
+	if (feast.min_times_to_eat == 0)
+	{
+		printf("Wrong Minimum Times to Eat\n");
+		exit(EXIT_FAILURE);
+	}
 	return (feast);
 }
 
@@ -86,6 +91,11 @@ void	make_philops(t_table *pp)
 	sfork = (sizeof(pthread_mutex_t) * pp->head);
 	pp->philop = malloc_table_sth(pp, splop);
 	pp->forks = malloc_table_sth(pp, sfork);
+	if (pp->philop == NULL || pp->forks == NULL)
+	{
+		pp->head = -1;
+		return ;
+	}
 	while (id < pp->head)
 	{
 		checker = pthread_mutex_init(&pp->forks[id], NULL);
@@ -104,11 +114,10 @@ t_table	make_table(int ac, char **av)
 	pimp = read_input(ac, av);
 	make_philops(&pimp);
 	init_philop(&pimp);
+	if (!pimp.philop)
+		pimp.head = -1;
+	if (pimp.philop->fork == -1)
+		pimp.head = -1;
 	pimp.start_time = get_time_ms();
-	while (i < pimp.head)
-	{
-		pimp.philop[i].last_time_eat = pimp.start_time;
-		i++;
-	}
 	return (pimp);
 }

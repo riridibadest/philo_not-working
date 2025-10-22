@@ -6,7 +6,7 @@
 /*   By: yuerliu <yuerliu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:27:01 by yuerliu           #+#    #+#             */
-/*   Updated: 2025/10/17 18:07:36 by yuerliu          ###   ########.fr       */
+/*   Updated: 2025/10/22 20:30:53 by yuerliu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_philop
 	struct s_table	*table;
 }					t_philop;
 
-// for other purpose maybe
+// for garbage collection
 typedef struct s_list
 {
 	void			*now;
@@ -55,31 +55,39 @@ typedef struct s_table
 	t_philop		*philop;
 }					t_table;
 
+// philo actions
 int					eat(t_philop *pp);
 void				p_sleep(t_philop *pp);
 void				thinking(t_philop *pp);
 void				solo_eating(t_philop *pp);
+void				*life_of_philop(void *pp);
+// Initialization
 t_table				read_input(int ac, char **av);
 void				init_philop(t_table *pimp);
 void				make_philops(t_table *pp);
 t_table				make_table(int ac, char **av);
-void				make_philops(t_table *pp);
-void				init_philop(t_table *pimp);
-t_table				read_input(int ac, char **av);
+// SIMULATION
+void				feast_time(t_table *pp);
+void				*dead_yet(void *pp);
+int					we_r_full(t_table *pp);
+// SIMULATION HELPERS
+size_t				eat_gap(t_table *pp, int id);
+void				take_forks(t_philop *pp, size_t id);
+void				smart_rest(t_philop *pp, size_t i);
+size_t				get_time_ms(void);
+void				o_print(t_philop *pp, int i, int id);
+int					death_check(t_table *pp);
+int death(t_philop *pp);
+void				destroy_mutexes(t_table *table);
+int check_starved(t_table *pp);
+
+// GARABAGE COLLECTION
 void				clean_up(t_list *garbabe);
+void				*malloc_table_sth(t_table *pp, size_t size);
+// input helper
 int					ok_input(int ac, char **av);
 int					ft_isdigit(int num);
 int					zero(int ac, char **av);
-void				*malloc_table_sth(t_table *pp, size_t size);
-size_t				get_time_ms(void);
-size_t				eat_gap(t_table *pp, int id);
-void				o_print(t_philop *pp, int i, int id);
-void				feast_time(t_table *pp);
-void				*life_of_philop(void *pp);
-void				*dead_yet(void *pp);
-void				smart_rest(t_philop *pp, size_t i);
-int					we_r_full(t_table *pp);
 int					ft_atoi(const char *str);
-void				take_forks(t_philop *pp, size_t id);
 
 #endif
